@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Datos</title>
+  <style>
+    body {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif, sans-serif;
+      background-image: url('imagen\ pacha.jpeg'); /* URL de tu imagen de fondo */
+      background-size: cover;/* Ajusta la imagen para cubrir todo el fondo */
+      background-position: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ccc;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    .trago-column {
+      width: calc(50% - 4px);
+      border: none;
+      background-color: transparent;
+      color: #008CBA;
+      font-weight: bold;
+    }
+
+    .trago-column input {
+      width: 100%;
+      background-color: transparent;
+      color: black;
+      border: none;
+
+    }
+
+    .header-label {
+      color: #008CBA;
+    }
+
+    .area-pacha td:first-child {
+      color: #008CBA;
+    }
+
+    .area-lounge td:first-child {
+      color: #4CAF50;
+    }
+
+    .area-barcelo td:first-child {
+      color: #8B4513;
+    }
+
+    .area-camel td:first-child {
+      color: #40E0D0;
+    }
+
+    .area-cholet td:first-child {
+      color: #FF0000;
+    }
+
+    .area-vip td:first-child {
+      color: #B22222;
+    }
+
+    .area-extras td:first-child {
+      color: #FFA500; /* Color naranja para "Extras" */
+    }
+
+    #nombre-container input {
+      width: calc(100% - 16px);
+      background-color: white;
+      color: black;
+      font-weight: bold;
+    }
+
+    #informe {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #fff;
+    }
+
+    #boton-contabilizar {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      float: left; /* Alinea el botón a la izquierda */
+      margin-top: 20px; /* Espacio superior de 20px */
+      margin-left: 20px; /* Espacio izquierdo de 20px */
+
+    }
+
+    #boton-contabilizar:hover {
+      background-color: #005f7f;
+    }
+
+    #boton-borrar {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      margin-left: 10px;
+      float:right; /* Alinea el botón a la izquierda */
+      margin-top: 20px; /* Espacio superior de 20px */
+      margin-left: 20px; /* Espacio izquierdo de 20px */
+
+    }
+
+    #boton-borrar:hover {
+      background-color: #005f7f;
+
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 200px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .login-container h2 {
+      color: #008CBA;
+      margin-bottom: 20px;
+    }
+
+    .login-container input {
+      width: calc(100% - 16px);
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .login-container button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-container button:hover {
+      background-color: #005f7f;
+    }
+
+    /* Estilos para centrar el título "Lista de Datos" a la derecha */
+    .form-container {
+      text-align: center; /* Alinea el contenido a la derecha */
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-container" id="login-container">
+    <h2>Inicie Sesión</h2>
+    <input type="text" id="username" placeholder="Usuario">
+    <br>
+    <input type="password" id="password" placeholder="Contraseña">
+    <br>
+    <button onclick="validarCredenciales()">Iniciar Sesión</button>
+  </div>
+
+  <div class="form-container" id="form-container" style="display:none;">
+    <h2 style="color: #00FFFF;">Lista de Mesas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th class="header-label">Nombre</th>
+          <th class="trago-column"><label for="trago1">Trago 1</label></th>
+          <th class="trago-column"><label for="trago2">Trago 2</label></th>
+          <th class="header-label">Monto</th>
+        </tr>
+      </thead>
+      <tbody id="data-container">
+        <!-- JavaScript generará las filas automáticamente -->
+      </tbody>
+    </table>
+
+    <button id="boton-contabilizar" onclick="contabilizar()">Contabilizar</button>
+    <button id="boton-borrar" onclick="borrarDatos()">Borrar Datos Guardados</button>
+  </div>
+
+  <script>
+    const tableBody = document.getElementById('data-container');
+    let contadorPacha = 0;
+    let contadorLounge = 0;
+    let contadorBarcelo = 0;
+    let contadorCamel = 0;
+    let contadorCholet = 0;
+    let contadorVIP = 0;
+    let contadorExtras = 0; // Contador para "Extras"
+
+    function agregarFila(area, contador, nombre, trago1, trago2, monto) {
+      let areaClass = '';
+      switch (area) {
+        case 'Pacha':
+          contadorPacha++;
+          areaClass = 'area-pacha';
+          break;
+        case 'Lounge':
+          contadorLounge++;
+          areaClass = 'area-lounge';
+          break;
+        case 'Barcelo':
+          contadorBarcelo++;
+          areaClass = 'area-barcelo';
+          break;
+        case 'Camel':
+          contadorCamel++;
+          areaClass = 'area-camel';
+          break;
+        case 'Cholet':
+          contadorCholet++;
+          areaClass = 'area-cholet';
+          break;
+        case 'VIP Socios':
+          contadorVIP++;
+          areaClass = 'area-vip';
+          break;
+        case 'Extras':
+          contadorExtras++;
+          areaClass = 'area-extras';
+          break;
+        default:
+          break;
+      }
+
+      const nuevaFila = `
+      <tr class="${areaClass}">
+        <td>${contador} ${area}</td>
+        <td id="nombre-container"><input type="text" id="nombre${contador}" name="nombre${contador}" placeholder="Ingrese nombre" value="${nombre}"></td>
+        <td><input type="text" id="trago1${contador}" name="trago1${contador}" placeholder="Trago 1" value="${trago1}"></td>
+        <td><input type="text" id="trago2${contador}" name="trago2${contador}" placeholder="Trago 2" value="${trago2}"></td>
+        <td><input type="number" id="monto${contador}" name="monto${contador}" min="0" placeholder="Ingrese monto" value="${monto}"></td>
+      </tr>
+    `;
+      tableBody.insertAdjacentHTML('beforeend', nuevaFila);
+    }
+
+    // Función para guardar los datos en localStorage
+    function guardarDatos() {
+      const filas = document.querySelectorAll('#data-container tr');
+      filas.forEach((fila, index) => {
+        const nombreInput = fila.querySelector('input[name^="nombre"]');
+        const trago1Input = fila.querySelector('input[name^="trago1"]');
+        const trago2Input = fila.querySelector('input[name^="trago2"]');
+        const montoInput = fila.querySelector('input[name^="monto"]');
+
+        localStorage.setItem(`nombre${index}`, nombreInput.value);
+        localStorage.setItem(`trago1${index}`, trago1Input.value);
+        localStorage.setItem(`trago2${index}`, trago2Input.value);
+        localStorage.setItem(`monto${index}`, montoInput.value);
+      });
+    }
+
+    // Función para restaurar los datos desde localStorage
+    function restaurarDatos() {
+      const filas = document.querySelectorAll('#data-container tr');
+      filas.forEach((fila, index) => {
+        const nombreInput = fila.querySelector('input[name^="nombre"]');
+        const trago1Input = fila.querySelector('input[name^="trago1"]');
+        const trago2Input = fila.querySelector('input[name^="trago2"]');
+        const montoInput = fila.querySelector('input[name^="monto"]');
+
+        nombreInput.value = localStorage.getItem(`nombre${index}`) || '';
+        trago1Input.value = localStorage.getItem(`trago1${index}`) || '';
+        trago2Input.value = localStorage.getItem(`trago2${index}`) || '';
+        montoInput.value = localStorage.getItem(`monto${index}`) || '';
+      });
+    }
+
+    // Generar las filas para Pacha (8 filas)
+    for (let i = 1; i <= 8; i++) {
+      agregarFila('Pacha', i, '', '', '', '');
+    }
+
+    // Generar las filas para Lounge (11 filas)
+    for (let i = 1; i <= 11; i++) {
+      agregarFila('Lounge', i, '', '', '', '');
+    }
+
+    // Generar las filas para Barcelo (18 filas)
+    for (let i = 1; i <= 18; i++) {
+      agregarFila('Barcelo', i, '', '', '', '');
+    }
+
+    // Generar las filas para Camel (3 filas)
+    for (let i = 1; i <= 3; i++) {
+      agregarFila('Camel', i, '', '', '', '');
+    }
+
+    // Generar las filas para Cholet (14 filas)
+    for (let i = 1; i <= 14; i++) {
+      agregarFila('Cholet', i, '', '', '', '');
+    }
+
+    // Generar las filas para VIP Socios (6 filas)
+    for (let i = 1; i <= 6; i++) {
+      agregarFila('VIP Socios', i, '', '', '', '');
+    }
+
+    // Generar las filas para Extras (3 filas)
+    for (let i = 1; i <= 7; i++) {
+      agregarFila('Extras', i, '', '', '', '');
+    }
+
+    // Ejecutar restaurarDatos al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      mostrarFormularioLogin();
+    });
+
+    // Función para mostrar el formulario de inicio de sesión
+    function mostrarFormularioLogin() {
+      const loginContainer = document.getElementById('login-container');
+      loginContainer.style.display = 'block';
+    }
+
+    // Función para validar las credenciales de usuario y contraseña
+    function validarCredenciales() {
+      const usuario = document.getElementById('username').value.trim();
+      const contraseña = document.getElementById('password').value.trim();
+
+      // Aquí deberías tener un sistema adecuado de autenticación, por ejemplo:
+      if (usuario === 'Gaby12' && contraseña === 'Gaby12') {
+        const loginContainer = document.getElementById('login-container');
+        const formContainer = document.getElementById('form-container');
+
+        loginContainer.style.display = 'none';
+        formContainer.style.display = 'block';
+
+        restaurarDatos(); // Restaurar los datos al autenticar correctamente
+      } else {
+        alert('Usuario o contraseña incorrectos.');
+      }
+    }
+
+    // Ejecutar guardarDatos antes de que el usuario cierre la página o recargue
+    window.addEventListener('beforeunload', () => {
+      guardarDatos();
+    });
+
+    // Función para contabilizar datos y abrir informe en una nueva ventana
+    function contabilizar() {
+      let totalMonto = 0;
+      let totalTragos = {};
+      let montosRango = { '980': 0, '900': 0, '750': 0 };
+      let otrosMontos = [];
+
+      // Recorrer todas las filas de la tabla
+      const filas = document.querySelectorAll('#data-container tr');
+      filas.forEach((fila) => {
+        const montoInput = fila.querySelector('input[name^="monto"]');
+        const monto = parseFloat(montoInput.value) || 0;
+        if (montoInput.value.trim() !== '') {
+          totalMonto += monto;
+
+          // Contar trago 1 y trago 2
+          const trago1 = fila.querySelector('input[name^="trago1"]').value.trim();
+          const trago2 = fila.querySelector('input[name^="trago2"]').value.trim();
+          if (trago1 !== '') {
+            totalTragos[trago1] = (totalTragos[trago1] || 0) + 1;
+          }
+          if (trago2 !== '') {
+            totalTragos[trago2] = (totalTragos[trago2] || 0) + 1;
+          }
+
+          // Clasificar montos por rango
+          if (monto === 980) {
+            montosRango['980']++;
+          } else if (monto === 900) {
+            montosRango['900']++;
+          } else if (monto === 750) {
+            montosRango['750']++;
+          } else {
+            otrosMontos.push(monto);
+          }
+        }
+      });
+
+      // Crear contenido del informe
+      const informeHTML = `
+      <html>
+      <head>
+        <title>Reporte de Mesas</title>
+        <style>
+          body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif, sans-serif;
+            display: flex;
+            justify-content: center;
+            background-image: url('imagen pacha.jpeg');
+            /* URL de tu imagen de fondo */
+             background-size: cover;
+             /* Ajusta la imagen para cubrir todo el fondo */
+             background-position: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+          }
+          .informe-container {
+            width: 80%;
+            max-width: 384px;
+            padding: 20px;
+            border: 2px solid #008CBA;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+          }
+          h3 {
+            color: #008CBA;
+            font-size: 2em;
+          }
+          p {
+            font-size: 1.2em;
+          }
+          ul {
+            list-style-type: none;
+            padding: 0;
+          }
+          li {
+            font-size: 1.2em;
+            margin: 5px 0;
+          }
+        </style>
+      </head>
+      <body>
+
+        <div class="informe-container">
+          <h3>Reporte de Mesas</h3>
+          <p>Total Monto: ${totalMonto.toFixed(2)} Bs.</p>
+          <p>Total Tragos: ${Object.keys(totalTragos).map(trago => `${totalTragos[trago]} ${trago}`).join(', ')}</p>
+          <p>Montos por Rango:</p>
+          <ul>
+            <li>Mesas de 980 son: ${montosRango['980']} Bs.</li>
+            <li>Mesas de 900 son: ${montosRango['900']} Bs.</li>
+            <li>Mesas de 750 son: ${montosRango['750']} Bs.</li>
+          </ul>
+          <p>Otros Montos: ${otrosMontos.length > 0 ? otrosMontos.join(', ') : 'No hay otros montos.'} Bs.</p>
+        </div>
+      </body>
+      </html>
+    `;
+
+      // Abrir una nueva ventana e insertar el contenido del informe
+      const informeVentana = window.open('', '_blank');
+      informeVentana.document.write(informeHTML);
+      informeVentana.document.close();
+    }
+
+    // Función para borrar los datos guardados en localStorage
+    function borrarDatos() {
+      const filas = document.querySelectorAll('#data-container tr');
+      filas.forEach((fila) => {
+        const nombreInput = fila.querySelector('input[name^="nombre"]');
+        const trago1Input = fila.querySelector('input[name^="trago1"]');
+        const trago2Input = fila.querySelector('input[name^="trago2"]');
+        const montoInput = fila.querySelector('input[name^="monto"]');
+
+        nombreInput.value = '';
+        trago1Input.value = '';
+        trago2Input.value = '';
+        montoInput.value = '';
+
+        localStorage.clear();
+      });
+
+      alert('Datos borrados correctamente.');
+    }
+  </script>
+
+</body>
+
+</html>
+
+
